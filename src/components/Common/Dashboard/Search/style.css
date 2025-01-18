@@ -1,0 +1,45 @@
+.search-flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 3rem;
+    color: var(--grey);
+    width: 80%;
+    margin: 1rem;
+    border-radius: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-flex input {
+    width: 100%; 
+    font-family: "Inter";
+    font-size: 1.2rem;
+    border: none;
+
+}
+
+.search-flex input:focus {
+    outline: none;
+}
+
+.search-flex-dark {
+    background-color: var(--darkgrey);
+}
+
+.search-flex-dark input {
+    background-color: var(--darkgrey);
+    color: var(--grey);
+}
+
+
+.search-flex-light {
+    background-color: var(--lightgrey);
+}
+
+.search-flex-light input {
+    background-color: var(--lightgrey);
+    color: var(--black);
+}
+
