@@ -65,7 +65,7 @@ Ensure you have [Node.js](https://nodejs.org/) installed.
 - `npm run eject`: Removes the single build dependency.
 
 ## Deployment
-Follow the steps in the [Create React App Deployment Guide](https://facebook.github.io/create-react-app/docs/deployment) to deploy your application.
+Follow the steps in the [Create React App Deployment Guide](https://facebook.github.io/create-react-app/docsdeployment) to deploy your application.
 
 ## Learn More
 - [Create React App Documentation](https://facebook.github.io/create-react-app/docs/getting-started)
