@@ -1,7 +1,7 @@
-# Cryptack - The Only CryptoTracker You Need!
+# CoinTrack - The Only CryptoTracker You Need!
 
 ## Description
-CryptoTracker is the tool you've always needed. Compare different cryptocurrencies, view their graphs—prices, total volumes, market cap, etc. Search from the top 100 cryptocurrencies in real-time and add them to your watchlist.
+CoinTrack is the tool you've always needed. Compare different cryptocurrencies, view their graphs—prices, total volumes, market cap, etc. Search from the top 100 cryptocurrencies in real-time and add them to your watchlist.
 
 ## Objective
 Build a responsive and live crypto tracker using React JS to help users analyze, compare, and learn about cryptocurrencies all in one place.
@@ -32,9 +32,7 @@ The world is moving towards Web3 and crypto, making it essential to stay updated
 11. **Coin Page**: Integrate Chart.js for coin visualizations.
 
 ## Project Links and References
-- **Project Link**: [Cryptack](https://cryptack.netlify.app/)
-- **GitHub Repo**: [CryptoTracker Repository](https://github.com/AkashJana18/cryptack)
-- **Figma**: [Designs](https://www.figma.com/design/J1qMb6OQJWumOTLZtTB081/Cryptack?node-id=0-1&t=nDbIoU654APvzhgG-1)
+- **Project Link**: [CointTrack](https://cointrack1.netlify.app/)
 - **Dribbble**: [Design Inspirations](https://www.framer.com/motion/)
 - **API Documentation**: [Coingecko API](https://www.coingecko.com/en/api)
 - **Chart.js Documentation**: [Chart.js](https://www.chartjs.org/docs/latest/)
