@@ -46,8 +46,8 @@ Ensure you have [Node.js](https://nodejs.org/) installed.
 ### Installation
 1. Clone the repository.
     ```bash
-    git clone https://github.com/yourusername/cryptotracker.git
-    cd cryptotracker
+    git clone https://github.com/shrijit37/CoinTrack.git
+    cd cointrack
     ```
 2. Install dependencies.
     ```bash
