@@ -32,7 +32,7 @@ The world is moving towards Web3 and crypto, making it essential to stay updated
 11. **Coin Page**: Integrate Chart.js for coin visualizations.
 
 ## Project Links and References
-- **Project Link**: [CointTrack](https://cointrack1.netlify.app/)
+- **Project Link**: [CoinTrack](https://cointrack.shrijit.tech/)
 - **Dribbble**: [Design Inspirations](https://www.framer.com/motion/)
 - **API Documentation**: [Coingecko API](https://www.coingecko.com/en/api)
 - **Chart.js Documentation**: [Chart.js](https://www.chartjs.org/docs/latest/)
@@ -73,3 +73,7 @@ Follow the steps in the [Create React App Deployment Guide](https://facebook.git
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Live Deployment
+
+**Production**: https://cointrack.shrijit.tech
