@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { useTheme } from "../../../../context/ThemeContext";
 
 const Grid = ({ coin }) => {
-  const {darkMode, _} = useTheme();
+  const { darkMode } = useTheme();
   const gridStyles = darkMode ? 'grid-container' : 'grid-container grid-container-light'
   const coinSymbolStyles = darkMode ? 'coin-symbol' : 'coin-symbol coin-symbol-light'
   const totalVolumeStyles = darkMode ? 'total-volume' : 'total-volume total-volume-light'

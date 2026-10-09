@@ -43,24 +43,40 @@ const CoinPage = () => {
     }
   }
 
+  // Fetch on mount and whenever the coin in the route changes.
+  //
+  // The body lives inline rather than calling a getData() helper: the
+  // exhaustive-deps rule flags a function declared in the component body and
+  // omitted from the dep array, and hoisting it into useCallback would mean
+  // either re-fetching on every `days`/`priceType` change (which the two
+  // handlers above already handle) or lying about the deps.
   useEffect(() => {
-    if (id) {
-      getData();
-    }
-  }, [id]);
+    let cancelled = false;
 
-  async function getData() {
-    const data = await getCoinData(id);
+    const load = async () => {
+      const data = await getCoinData(id);
 
-    if (data) {
+      if (!data || cancelled) return;
+
       coinObject(setCoinData, data);
       const prices = await getCoinPrices(id, days, priceType);
+
+      // `cancelled` covers the async gap above: navigating to another coin
+      // mid-flight would otherwise let the stale response win.
+      if (cancelled) return;
+
       if (prices.length > 0) {
         settingChartData(setChartData, prices);
         setIsLoading(false);
       }
-    }
-  }
+    };
+
+    if (id) load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

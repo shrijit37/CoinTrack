@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './style.css'
 import AnchorTemporaryDrawer from './drawer'
 import Button from '../Button'
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { useTheme } from '../../../context/ThemeContext'
 
 const Header = () => {
-  const {darkMode, _} = useTheme()
+  const { darkMode } = useTheme()
   const headerStyles = darkMode ? 'header header-dark' : 'header header-light'
   const linkStyles = darkMode ? 'link link-dark' : 'link link-light'
   return (

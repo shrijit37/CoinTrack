@@ -36,29 +36,48 @@ const Compare = React.memo(() => {
     }
   };
 
+  // Refetch whenever either coin, the range, or the price type changes.
+  // Inline body rather than calling a getData() helper: the exhaustive-deps
+  // rule flags component-body functions omitted from the dep array, and
+  // useCallback would either lie about deps or re-trigger this effect from
+  // inside its own state updates.
   useEffect(() => {
-    getData();
-  }, [crypto1, crypto2, days, priceType]); 
+    let cancelled = false;
 
-  async function getData() {
-    setIsLoading(true); 
-    const data1 = await getCoinData(crypto1);
-    const data2 = await getCoinData(crypto2);
-    if (data1) {
-      coinObject(setCrypto1Data, data1);
-    }
-    if (data2) {
-      coinObject(setCrypto2Data, data2);
-    }
-    if (data1 && data2) {
-      const prices1 = await getCoinPrices(crypto1, days, priceType);
-      const prices2 = await getCoinPrices(crypto2, days, priceType);
-      if (prices1.length > 0 && prices2.length > 0) {
-        settingChartData(setChartData, prices1, prices2);
-        setIsLoading(false);
+    const load = async () => {
+      setIsLoading(true);
+      const data1 = await getCoinData(crypto1);
+      const data2 = await getCoinData(crypto2);
+
+      if (cancelled) return;
+
+      if (data1) {
+        coinObject(setCrypto1Data, data1);
       }
-    }
-  }
+      if (data2) {
+        coinObject(setCrypto2Data, data2);
+      }
+      if (data1 && data2) {
+        const prices1 = await getCoinPrices(crypto1, days, priceType);
+        const prices2 = await getCoinPrices(crypto2, days, priceType);
+
+        // Guards the second async gap: changing range mid-flight must not
+        // let the older response overwrite the newer chart.
+        if (cancelled) return;
+
+        if (prices1.length > 0 && prices2.length > 0) {
+          settingChartData(setChartData, prices1, prices2);
+          setIsLoading(false);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [crypto1, crypto2, days, priceType]);
 
   const handleCoinChange = async (e, isCoin2) => {
     setIsLoading(true);

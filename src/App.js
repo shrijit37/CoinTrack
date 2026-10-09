@@ -9,7 +9,7 @@ import CoinPage from './pages/Coin';
 import { useTheme } from './context/ThemeContext';
 
 function App() {
-  const {darkMode, _} = useTheme();
+  const {darkMode} = useTheme();
   const background = darkMode ? 'App theme-dark' : 'App theme-light';
   return (
     <div className={background}>

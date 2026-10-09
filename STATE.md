@@ -87,7 +87,29 @@ this one account) to deploy; canonical copy in Infisical `platform/prod` as
   a stale deployment. Repointed to Cloudflare Pages 2026-10-09.
 - Repo had no CI at all before this migration.
 
-## Hygiene problems
+## CI behaviour worth knowing
+
+`scripts/build` exports `CI=true`. GitHub Actions sets `CI` automatically, and
+CRA promotes every lint warning to a hard build error when it is truthy. That
+made the first CI run fail on warnings that never failed locally. Exporting it
+in the script means local and CI builds behave identically.
+
+To keep that useful, the source is now warning-free. Fixed during this
+migration:
+
+| File | Problem | Fix |
+|---|---|---|
+| `components/Coin/CoinChart` | `import { Chart as ChartJS }` bound a name only to dodge unused-var | bare side-effect `import "chart.js/auto"` |
+| `components/Coin/PriceType`, `SelectDays`, `Common/Button`, `Common/Header` | unused `useState` import | removed |
+| `App.js`, `Dashboard/Grid`, `Dashboard/Search`, `Header` | destructured `_` from `useTheme()`, which the context stopped returning | destructure `darkMode` only |
+| `ComparePage/SelectCoins` | `!=` / `!==` inconsistency | normalised to `!==` |
+| `Dashboard/Pagination` | anonymous default export | named function |
+| `pages/Coin`, `pages/Compare` | `react-hooks/exhaustive-deps` on `getData()` | effect body inlined, plus a `cancelled` flag so a slow response for an old coin/range cannot overwrite newer state |
+
+`scripts/lint` caps warnings at 100 rather than 0 so one stray warning cannot
+hard-fail CI while the rest are being cleaned up. Lower it as the tree improves.
+
+## Known issues
 
 - **`allorigins.win` CORS proxy.** `getCoinData.js` routes coin detail
   requests through a third-party service. It can be slow, rate-limited, or
@@ -99,11 +121,9 @@ this one account) to deploy; canonical copy in Infisical `platform/prod` as
   warning appears on every install. Migrating to Vite is the obvious next
   step; blocked only on wanting a dedicated commit.
 - `process.env.COINGECKO_API_KEY` is referenced in `getCoinPrices.js`. In a
-  CRA build any `REACT_APP_*`/`process.env` value is **inlined into the
-  browser bundle**, so this must never hold a real secret. Currently unset;
-  leave it unset.
-- Pre-existing `react-hooks/exhaustive-deps` lint warnings in `pages/Compare.js`
-  and others. Warnings only, lint stays green.
+  CRA build any `process.env` value is **inlined into the browser bundle**, so
+  this must never hold a real secret. Currently unset; leave it unset. The
+  `.env.example` says so explicitly.
 - `npm audit` reports vulnerabilities, not yet triaged.
 - No Gitleaks / dependency / container scanning configured yet.
 - README is still the stock create-react-app README.

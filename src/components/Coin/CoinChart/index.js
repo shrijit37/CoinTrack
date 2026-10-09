@@ -1,6 +1,10 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS } from "chart.js/auto"; //Dont get rid of this
+// Side-effect import: registers every chart.js controller/renderer so
+// react-chartjs-2 can render <Line />. Do not remove. Previously imported as
+// `import { Chart as ChartJS } from "chart.js/auto"` purely to avoid an
+// unused-var error, which was misleading -- the binding is never referenced.
+import "chart.js/auto";
 import { convertNumber } from "../../../functions/convertNumber";
 
 function LineChart({ chartData, priceType, multiAxis }) {

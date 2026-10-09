@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 # Production build into build/ (CRA's output dir; Pages serves it).
+#
+# CI=true is exported because GitHub Actions sets it automatically and CRA
+# promotes every lint warning to a build error when it is truthy. Exporting it
+# here means a clean local build and a clean CI build behave identically,
+# instead of CI failing on warnings that never fail locally.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-npm run build
+CI=true npm run build

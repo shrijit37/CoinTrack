@@ -43,7 +43,7 @@ export default function SelectCoins({ crypto1, crypto2, handleCoinChange }) {
         onChange={(e) => handleCoinChange(e, false)}
       >
         {allCoins
-          .filter((item) => item.id != crypto2)
+          .filter((item) => item.id !== crypto2)
           .map((coin, i) => (
             <MenuItem value={coin.id} key={i}>
               {coin.name}
@@ -59,7 +59,7 @@ export default function SelectCoins({ crypto1, crypto2, handleCoinChange }) {
         onChange={(e) => handleCoinChange(e, true)}
       >
         {allCoins
-          .filter((item) => item.id != crypto1)
+          .filter((item) => item.id !== crypto1)
           .map((coin, i) => (
             <MenuItem value={coin.id} key={i}>
               {coin.name}

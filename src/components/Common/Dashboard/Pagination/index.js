@@ -3,7 +3,7 @@ import Pagination from "@mui/material/Pagination";
 import "./style.css";
 import { useTheme } from "../../../../context/ThemeContext";
 
-export default function ({ page, handlePageChange }) {
+export default function PaginationControls({ page, handlePageChange }) {
   const {darkMode} = useTheme();
   const colorStyle = darkMode ? "#fff" : "#000";
   return (
