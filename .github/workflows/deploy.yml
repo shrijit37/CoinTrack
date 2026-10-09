@@ -1,0 +1,83 @@
+# Canonical static pipeline: test → lint → build → Cloudflare Pages.
+# Copy to .github/workflows/deploy.yml for STATIC-class repos.
+#
+# No Docker and no Dokploy: a static site has no container and nothing is built
+# on the deploy server.
+#
+# Required repo config:
+#   secrets.CLOUDFLARE_API_TOKEN  (Infisical-backed; Pages deploy only)
+#   vars.CLOUDFLARE_ACCOUNT_ID
+#   vars.PAGES_PROJECT
+#   vars.APP_URL                      e.g. https://cointrack.shrijit.tech
+name: deploy-static
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install deps
+        run: ./scripts/setup
+      - name: Run test suite
+        run: make test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      # Install deps in every job that runs a script: without node_modules
+      # the linter is not on PATH and the failure is exit 127, which reads
+      # like a tooling bug rather than a missing step.
+      - name: Install deps
+        run: ./scripts/setup
+      - name: Lint
+        run: make lint
+
+  deploy:
+    needs: [test, lint]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install deps
+        run: ./scripts/setup
+      - name: Build static output
+        run: make build
+      - name: Publish to Cloudflare Pages
+        # PRs get Pages previews automatically; main publishes to production.
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy build --project-name=${{ vars.PAGES_PROJECT }} --branch=${{ github.ref_name }}
+
+  # Promotion gate. Runs only after a successful production deploy.
+  verify-production:
+    if: github.ref == 'refs/heads/main'
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Health check
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: make health

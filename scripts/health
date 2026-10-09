@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Health check for the CI promotion gate.
+#
+# This repo is STATIC, so there is no /health endpoint. The equivalent
+# assertion is that the deployed URL serves the built app, and that a
+# client-side route (which only resolves via the SPA fallback) also works.
+# The second probe is the one that catches a missing _redirects file.
+set -euo pipefail
+: "${APP_URL:?APP_URL is required}"
+
+code=$(curl -fsS -o /dev/null -w '%{http_code}' --max-time 20 "$APP_URL")
+[ "$code" = "200" ] || { echo "FAIL: $APP_URL returned $code"; exit 1; }
+
+body=$(curl -fsS --max-time 20 "$APP_URL")
+case "$body" in
+  *'<div id="root">'*) echo "healthy: $APP_URL serves the app shell" ;;
+  *) echo "FAIL: $APP_URL returned 200 but not the app shell"; exit 1 ;;
+esac
+
+# Deep-link probe: a real client-side route must also return 200.
+deep=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$APP_URL/dashboard")
+[ "$deep" = "200" ] || {
+  echo "FAIL: $APP_URL/dashboard returned $deep (SPA fallback broken?)"
+  exit 1
+}
+echo "healthy: SPA fallback serves $APP_URL/dashboard"

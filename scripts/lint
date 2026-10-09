@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Lint via eslint (react-app config, as declared in package.json).
+# NOTE: the current tree emits pre-existing react-hooks/exhaustive-deps
+# warnings. These are warnings, not errors, so lint stays green; they are
+# tracked in STATE.md rather than silenced.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+npx --no-install eslint src --ext .js,.jsx --max-warnings=100

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Test suite. CI=true makes CRA's watch mode exit instead of hanging.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+CI=true npm test -- --watchAll=false --passWithNoTests

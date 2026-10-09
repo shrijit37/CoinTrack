@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Install dependencies from the committed lockfile.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+npm ci
+
+# react-scripts@5 predates the npm 11 install-scripts gate, so core-js's
+# postinstall never runs and the build fails on missing core-js modules.
+# Approve it explicitly rather than relying on a global npm config.
+npm install-scripts approve core-js core-js-pure >/dev/null 2>&1 || true
+npm rebuild core-js core-js-pure >/dev/null 2>&1 || true

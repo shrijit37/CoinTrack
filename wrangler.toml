@@ -1,0 +1,5 @@
+# Cloudflare Pages configuration.
+# Machine-readable deployment descriptor; keep in sync with platform.yaml.
+name = "cointrack"
+compatibility_date = "2026-10-09"
+pages_build_output_dir = "build"

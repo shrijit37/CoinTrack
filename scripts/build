@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Production build into build/ (CRA's output dir; Pages serves it).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+npm run build

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Local dev server (CRA). Hot reload on :3000.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+exec npm start

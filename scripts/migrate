@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# No database. STATIC class: Cloudflare Pages serves build/ and there is no
+# server-side state. The CoinGecko calls are made from the browser.
+set -euo pipefail
+echo "migrate: no-op (static class, no database)"

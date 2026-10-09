@@ -59,17 +59,62 @@ Ensure you have [Node.js](https://nodejs.org/) installed.
     ```
 
 ### Available Scripts
-- `npm start`: Runs the app in development mode.
-- `npm test`: Launches the test runner.
-- `npm run build`: Builds the app for production.
-- `npm run eject`: Removes the single build dependency.
+Use the `make` targets, which wrap the standard `scripts/` contract. CI calls
+these and never a framework command directly.
 
-## Deployment
-Follow the steps in the [Create React App Deployment Guide](https://facebook.github.io/create-react-app/docsdeployment) to deploy your application.
+- `make setup`: install dependencies from the lockfile.
+- `make dev`: dev server on :3000 with hot reload.
+- `make test`: test suite (`CI=true`, non-watch).
+- `make lint`: eslint via the react-app config.
+- `make build`: production build into `build/`.
 
-## Learn More
-- [Create React App Documentation](https://facebook.github.io/create-react-app/docs/getting-started)
-- [React Documentation](https://reactjs.org/)
+The underlying `npm` scripts still work if you prefer them directly.
+
+## Class and deploy path
+
+`STATIC`. No container, no database, no server process. Deployed by Cloudflare
+Pages:
+
+```text
+push to main → GitHub Actions (test → lint → build → Pages) → Cloudflare Pages
+PR            → test + lint + Pages preview
+```
+
+Nothing is built on the deploy server, and Dokploy is not involved.
+
+Because routing is client-side (`BrowserRouter`), `public/_redirects` provides
+the SPA fallback. Without it, refreshing or sharing `/dashboard`, `/compare`,
+`/watchlist` or `/coin/:id` 404s at the CDN.
+
+## Configuration
+
+Non-secret values are documented in `.env.example`. This project has no
+secrets. Note that any `COINGECKO_API_KEY` used in a CRA build is inlined into
+the browser bundle and is therefore public.
+
+| Repo variable | Purpose |
+|---|---|
+| `PAGES_PROJECT` | Pages project name (`cointrack`) |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account |
+| `APP_URL` | production URL, used by the CI health gate |
+| `CLOUDFLARE_API_TOKEN` | *(secret)* Pages deploy token |
+
+## Health
+
+STATIC repos have no `/health` endpoint. `make health` asserts the deployed
+URL serves the app shell *and* that a deep link resolves, which is what
+catches a missing SPA fallback.
+
+## Rollback
+
+Cloudflare Pages retains every deployment; promote a previous one from the
+Pages dashboard or API. No rebuild needed.
+
+## Known issues
+
+See [STATE.md](./STATE.md) for the full list, including the
+`allorigins.win` CORS proxy in `getCoinData.js` and the fact that
+`react-scripts@5` is unmaintained.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

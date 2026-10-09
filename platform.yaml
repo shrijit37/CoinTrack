@@ -1,0 +1,9 @@
+name: cointrack
+type: static
+runtime: node
+deploy:
+  target: cloudflare-pages
+  domain: cointrack.shrijit.tech
+build:
+  command: make build
+  output: build

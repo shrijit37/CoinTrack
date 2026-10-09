@@ -1,0 +1,5 @@
+# SPA fallback for client-side routing (react-router BrowserRouter).
+# Without this, a hard refresh or shared link to /dashboard, /compare,
+# /watchlist or /coin/:id returns 404 from the CDN instead of the app.
+# Static asset passthrough takes priority, so hashed JS/CSS is unaffected.
+/*    /index.html   200
