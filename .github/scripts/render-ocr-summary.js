@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identif
 // Render an `ocr review --format json` payload into a GitHub step summary.
 //
 // Used by .github/workflows/ocr-review-push.yml, where there is no pull
